@@ -1,0 +1,21 @@
+{
+  "api_secret": "insert admin only api token here",
+  "app_secret": "insert app secret for hashing uids",
+  "mongo_ip": "127.0.0.1",
+  "mongo_port": 27017,
+  "storage_dir": "public/i",
+  "allowed_extensions": [
+    ".png", ".jpeg", ".jpg", ".gif", ".mp4", ".webp", ".txt"
+  ],
+  "image_extensions": [
+    ".png", ".jpeg", ".jpg", ".gif", ".webp"
+  ],
+  "domains": [
+    "i.ksoft.si",
+    "rickbot.is-going-to-rickroll.me",
+    "nani.is-going-to-rickroll.me",
+    "shiro.is-going-to-rickroll.me",
+    "panda.is-going-to-rickroll.me",
+    "xignotic.is-going-to-rickroll.me"
+  ]
+}

@@ -1,10 +1,10 @@
 {
-  "Name": "flask-sharex",
+  "Name": "ksoft-sharex",
   "DestinationType": "ImageUploader",
   "RequestURL": "https://i.ksoft.si/upload",
   "FileFormName": "image",
-  "Arguments": {
-    "secret_key": "secret"
+  "Headers": {
+    "Authorization": "YOUR_TOKEN"
   },
   "URL": "https://i.ksoft.si/i/$json:filename$$json:extension$"
 }
