@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KSoft.Si :: Sharex Config</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <link rel="stylesheet" href="https://cdn.ksoft.si/_generic/css/milligram.css">
+    <style>
+        body {
+            background: #FFFFFF url("https://cdn.ksoft.si/images/bg/camera.jpg") center no-repeat fixed;
+            background-size: cover;
+        }
+
+        .container {
+            margin: 4vh auto;
+            position: relative;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .button-small {
+            font-size: .8rem;
+            height: 2.8rem;
+            line-height: 2.8rem;
+            padding: 0 1.5rem;
+        }
+
+        @media screen and (min-width: 1088px) {
+            .container {
+                max-width: 960px;
+                width: 960px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align: center">Your config:</h1>
+    <label for="domains">Select your domain of choice:</label>
+    <select name="domains" id="domains">
+        {% for domain in domains %}
+            <option value="{{ domain }}">{{ domain }}</option>
+        {% endfor %}
+    </select>
+    <div class="clearfix">
+        <div class="float-left">
+            <small><a class="button button-outline button-small" href="/my">Back</a></small>
+        </div>
+        <div class="float-right">
+            <small><button class="copy button-small" data-clipboard-target="#config">Copy</button></small>
+        </div>
+    </div>
+    <pre><code id="config">{
+  "Name": "ksoft-sharex",
+  "DestinationType": "ImageUploader",
+  "RequestURL": "https://i.ksoft.si/upload",
+  "FileFormName": "image",
+  "Headers": {
+    "Authorization": "{{ token }}"
+  },
+  "URL": "https://i.ksoft.si/i/$json:filename$$json:extension$"
+}</code></pre>
+</div>
+<script src="https://cdn.ksoft.si/_generic/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.ksoft.si/js/clipboard.min.js"></script>
+<script>
+    let conf = {
+        "Name": "ksoft-sharex",
+        "DestinationType": "ImageUploader",
+        "RequestURL": "https://i.ksoft.si/upload",
+        "FileFormName": "image",
+        "Headers": {
+            "Authorization": "{{ token }}"
+        },
+        "URL": "https://i.ksoft.si/i/$json:filename$$json:extension$"
+    };
+
+    $('#domains').on('change', function () {
+        conf.URL = "https://" + $(this).val() + "/i/$json:filename$$json:extension$";
+        $("#config").text(JSON.stringify(conf, null, 2));
+    });
+    const copyToClipboard = str => {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    };
+    new ClipboardJS('.copy');
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KSoft.Si :: My files</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/10.8.1/build.css"
+          integrity="sha256-u2cq3cYS2ekf7BQ72ZPpfFrTNkwVtC82WiKS+aIiuf8=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <link rel="stylesheet" href="https://cdn.ksoft.si/_generic/css/milligram.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/solid.css"
+          integrity="sha384-VGP9aw4WtGH/uPAOseYxZ+Vz/vaTb1ehm1bwx92Fm8dTrE+3boLfF1SpAtB1z7HW" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/fontawesome.css"
+          integrity="sha384-1rquJLNOM3ijoueaaeS5m+McXPJCGdr5HcA03/VHXxcp2kX2sUrQDmFc3jR5i/C7" crossorigin="anonymous">
+    <style>
+        body {
+            background: #FFFFFF url("https://cdn.ksoft.si/images/bg/camera5.jpg") center no-repeat fixed;
+            background-size: cover;
+        }
+
+        .container {
+            margin: 4vh auto;
+            position: relative;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .button-small {
+            font-size: .8rem;
+            height: 2.8rem;
+            line-height: 2.8rem;
+            padding: 0 1.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        / background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0 15px 15px 15px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .actions button {
+            border: none;
+            margin: 0 0 0 20px;
+            font-size: 1.8rem;
+            height: 2rem;
+            line-height: 2rem;
+            padding: 0;
+        }
+
+        @media screen and (min-width: 1088px) {
+            .container {
+                max-width: 960px;
+                width: 960px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align: center">Your files:</h1>
+    <div class="clearfix">
+        <div class="float-left">
+            <small><a class="button button-outline button-small" href="/my">Back to my account</a></small>
+        </div>
+        <div class="float-right">
+            <small>
+                <button class="button button-outline button-small" style="color:#f95454;border-color: red"
+                        id="delete-all">Delete all files
+                </button>
+            </small>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="column">
+            <div class="float-left">
+                <small><a class="button button-clear" {% if prev_page %}href="/my/files?page={{ prev_page_num }}"
+                          {% else %}disabled{% endif %}>previous page</a></small>
+            </div>
+        </div>
+        <div class="column" style="text-align: center;padding-top: 0.75rem"><b>{{ page }}</b></div>
+        <div class="column">
+            <div class="float-right">
+                <small><a class="button button-clear" {% if next_page %}href="/my/files?page={{ next_page_num }}"
+                          {% else %}disabled{% endif %}>next page</a></small>
+            </div>
+        </div>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th style="text-align: right">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in images %}
+            <tr>
+                <td><a href="#" class="preview" data-img="https://i.ksoft.si/i/{{ i.name }}{{ i.extension }}">
+                    {{ i.name }}{{ i.extension }}</a></td>
+                <td>{{ i.created | getdate }}</td>
+                <td>
+                    <div class="float-right actions">
+                        <button class="button-clear"
+                                onclick="window.open('https://i.ksoft.si/i/{{ i.name }}{{ i.extension }}', '_blank')"><i
+                                class="fas fa-share"></i></button>
+                        <button class="button-clear copy" style="color: dodgerblue"
+                                data-clipboard-text="https://i.ksoft.si/i/{{ i.name }}{{ i.extension }}"><i
+                                class="fas fa-clipboard"></i></button>
+                        <button class="button-clear delete" style="color:red" data-name="{{ i.name }}"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>You don't have any files yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div id="preview-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div style="width: 100%;height: auto; padding-top: 10px"><img src="https://cdn.ksoft.si/discord/loading.gif"
+                                                                      id="preview-img"
+                                                                      style="display: block;width: auto;height: auto; margin: auto">
+        </div>
+    </div>
+</div>
+<script src="https://cdn.ksoft.si/_generic/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.ksoft.si/js/clipboard.min.js"></script>
+<script>
+    var btns = document.querySelectorAll('.copy');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener('mouseleave', clearTooltip);
+        btns[i].addEventListener('blur', clearTooltip);
+    }
+
+    function clearTooltip(e) {
+        e.currentTarget.setAttribute('class', 'copy button-clear');
+        e.currentTarget.removeAttribute('aria-label');
+    }
+
+    function showTooltip(elem, msg) {
+        elem.setAttribute('class', 'copy button-clear tooltipped tooltipped-s');
+        elem.setAttribute('aria-label', msg);
+    }
+
+    function fallbackMessage(action) {
+        var actionMsg = '';
+        var actionKey = (action === 'cut' ? 'X' : 'C');
+        if (/iPhone|iPad/i.test(navigator.userAgent)) {
+            actionMsg = 'No support :(';
+        }
+        else if (/Mac/i.test(navigator.userAgent)) {
+            actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;
+        }
+        else {
+            actionMsg = 'Press Ctrl-' + actionKey + ' to ' + action;
+        }
+        return actionMsg;
+    }
+
+    var clipboard = new ClipboardJS('.copy');
+    clipboard.on('success', function (e) {
+        $(e.trigger).css("color", "#42f486");
+        showTooltip(e.trigger, "Copied");
+        window.setTimeout(function () {
+            $(e.trigger).css("color", "dodgerblue");
+        }, 2000)
+    });
+    clipboard.on('error', function (e) {
+        showTooltip(e.trigger, fallbackMessage(e.action))
+    });
+    $("#delete-all").on('click', function () {
+        if (confirm('Are you sure you want to delete all files?')) {
+            $.post(window.location.href, {
+                "action": "delete_all"
+            }, function (p) {
+                if (p.success) {
+                    alert("Removed all files from database!");
+                    window.location.reload()
+                } else {
+                    alert("Deletion failed.")
+                }
+            })
+        } else {
+            // Do nothing! uwu
+        }
+    });
+    $(".preview").on('click', function () {
+        $("#preview-img").attr("src", "https://cdn.ksoft.si/discord/loading.gif");
+        let imgurl = $(this).data("img");
+        $("#preview-img").attr("src", imgurl);
+        $("#preview-modal").show()
+    });
+    $(".close").on('click', function () {
+        $("#preview-modal").hide()
+    });
+    window.onclick = function (event) {
+        if (event.target == $("#preview-modal")) {
+            $("#preview-modal").hide();
+        }
+    };
+    $(".delete").on('click', function () {
+        var elm = $(this);
+        elm.prop('disabled', true);
+        var name = elm.data('name');
+        $.post(window.location.href, {
+            "action": "delete_one",
+            "name": name
+        }, function (p) {
+            if (p.success) {
+                elm.parent().parent().parent().animate({opacity: 0}, "slow", function () {
+                    elm.parent().parent().parent().remove()
+                })
+            } else {
+                alert("Deletion failed.")
+            }
+        })
+    })
+</script>
+</body>
+</html>
