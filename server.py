@@ -210,7 +210,7 @@ def upload():
         if extension not in allowed_extension:
             return 'File type is not supported', 415
 
-        elif size > 6000000:
+        elif size > 20000000:
             return 'File size too large', 400
 
         elif extension in image_extension:
