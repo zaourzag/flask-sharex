@@ -1,7 +1,7 @@
 # flask-sharex 
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square&colorB=2196F3" alt="License"></a> 
 <a href="https://www.python.org/downloads/release/python-365/"><img src="https://img.shields.io/badge/Python-v3.6.5-brightgreen.svg?style=flat-square&colorB=FFEB3B" alt="Python"></a> 
-<a href="https://github.com/markylon/flask-sharex/commits/master"><img src="https://img.shields.io/github/last-commit/markylon/flask-sharex.svg?style=flat-square&colorB=CDDC39" alt="Commit"></a>
+<a href="https://github.com/markylon/flask-sharex/commits/master"><img src="https://img.shields.io/github/last-commit/KSoft-Si/flask-sharex.svg?style=flat-square&colorB=CDDC39" alt="Commit"></a>
 
 ---
 
