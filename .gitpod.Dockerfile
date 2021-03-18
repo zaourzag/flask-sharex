@@ -5,9 +5,9 @@ RUN sudo apt-get update \
  && sudo apt-get install -y \
   redis-server mongodb \
  && sudo rm -rf /var/lib/apt/lists/*
-ports:
-  - port: 80
-  - port: 443
+   ports:
+      - 443:443
+      - 80:80
    
 
 # Install custom tools, runtimes, etc.
