@@ -4,10 +4,11 @@ import os
 import secrets
 import traceback
 from os.path import splitext
+from werkzeug.utils import secure_filename
 
 import pymongo
 from PIL import Image
-from flask import Flask, request, json, jsonify, render_template, session, redirect
+from flask import Flask, request, json, jsonify, render_template, session, redirect, send_from_directory
 from flask_session import Session
 from pymongo import MongoClient
 
@@ -86,6 +87,12 @@ def create_new_user(uid: int, name: str):
 def datefromunix(s):
     return datetime.datetime.fromtimestamp(int(s) / 1000).strftime("%Y-%m-%d %H:%M")
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                     'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 
 @app.route('/')
 def index():
@@ -121,7 +128,11 @@ def my_portal():
     activity = _db.images.find({"user_uid": session.get("logged_in")}).sort('created', pymongo.DESCENDING).limit(5)
     activity = [x for x in activity]
     return render_template("my_portal.html", domains=allowed_domains, total=total, images=activity)
-
+@app.route('/i/<filename>')
+def return_pic(filename):
+    """ Show just the image specified.
+    """
+    return send_from_directory( _config['storage_dir'], secure_filename(filename))
 
 @app.route('/my/files', methods=['GET', 'POST'])
 def my_files():
