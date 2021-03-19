@@ -1,5 +1,4 @@
-image:
-  file: zaourzag/olk
+image: zaourzag/olk:1.2
 
 tasks:
   - init: pip3 install -r ./requirements.txt
