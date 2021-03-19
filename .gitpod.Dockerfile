@@ -5,5 +5,4 @@ RUN sudo apt-get update \
  && sudo apt-get install -y \
   redis-server mongodb \
  && sudo rm -rf /var/lib/apt/lists/*
-EXPOSE 80
-EXPOSE 443
+
