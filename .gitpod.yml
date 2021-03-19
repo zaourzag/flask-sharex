@@ -2,6 +2,9 @@ image: zaourzag/olk:1.2
 ports:
    - port: 80
    - port: 443
+   - port: 8080
+   - port: 8443
+   - port: 3000
 tasks:
   - init: pip3 install -r ./requirements.txt
 github:
