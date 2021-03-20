@@ -245,7 +245,7 @@ def upload():
 
 @app.route('/add-user', methods=['POST'])
 def add_user():
-    token = request.headers.get("Authorization", "unknown")
+    token = request.form['Authorization']
     if token != secret_key:
         return "Not authorized", 403
     if request.method == 'POST':
