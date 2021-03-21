@@ -1,10 +1,5 @@
-import datetime
-import hashlib
-import os
-import secrets
-import traceback
-from os.path import splitext
-from werkzeug.utils import secure_filename
+import datetime import hashlib import os import secrets import traceback from os.path import splitext from 
+werkzeug.utils import secure_filename
 
 import pymongo
 from PIL import Image
@@ -204,6 +199,96 @@ def print_stats():
         "files": _db.images.count(),
         "domains": len(allowed_domains)
     })
+@app.route('/nl/')
+def index-nl():
+    return render_template("home.html", domains=allowed_domains)
+
+
+@app.route('/nl/login', methods=['GET', 'POST'])
+def login-nl():
+    if request.method == "POST":
+        usr = check_user(request.form.get("username", "unknown"), request.form.get("password", "unknown"))
+        if usr is None:
+            return render_template('login.html', is_error=True)
+        next_url = request.args.get("next", "/")
+        if session.get("logged_in"):
+            return redirect(next_url)
+        session['logged_in'] = usr.uid
+        return redirect(next_url)
+
+    else:
+        return render_template('nl/login.html', is_error=False)
+
+
+@app.route('/nl/my/ip', methods=['GET'])
+def my_ip-nl():
+    return jsonify({"ip": get_client_ip()})
+
+
+@app.route('/nl/my', methods=['GET'])
+def my_portal-nl():
+    if session.get("logged_in", None) is None:
+        return redirect("/login?next=/nl/my")
+    total = _db.images.find({"user_uid": session.get("logged_in")}).count()
+    activity = _db.images.find({"user_uid": session.get("logged_in")}).sort('created', pymongo.DESCENDING).limit(5)
+    activity = [x for x in activity]
+    return render_template("nl/my_portal.html", domains=allowed_domains, total=total, images=activity)
+
+
+@app.route('/nl/my/files', methods=['GET', 'POST'])
+def my_files-nl():
+    if session.get("logged_in", None) is None:
+        return redirect("/nl/login?next=/nl/my/files")
+
+    if request.method == "POST":
+        action = request.form.get("action")
+        if action == "delete_all":
+            total = _db.images.find({"user_uid": session.get("logged_in")})
+            for image in total:
+                fpath = "{}/{}{}".format(storage_folder, image['name'], image['extension'])
+                if os.path.exists(fpath):
+                    os.remove(fpath)
+                else:
+                    print("This file does not exist:", fpath)
+            _db.images.delete_many({"user_uid": session.get("logged_in")})
+        elif action == "delete_one":
+            name = request.form.get("name")
+            image = _db.images.find_one({"user_uid": session.get("logged_in"), "name": name})
+            if image:
+                fpath = "{}/{}{}".format(storage_folder, image['name'], image['extension'])
+                if os.path.exists(fpath):
+                    os.remove(fpath)
+                else:
+                    print("This file does not exist:", fpath)
+                    return jsonify({"success": False})
+                _db.images.delete_one({"user_uid": session.get("logged_in"), "name": image['name']})
+        return jsonify({"success": True})
+
+    def get_page(page_size, page_num):
+        skips = page_size * (page_num - 1)
+        cursor = _db.images.find({"user_uid": session.get("logged_in")}) \
+            .skip(skips) \
+            .limit(page_size) \
+            .sort('created', pymongo.DESCENDING)
+        return [x for x in cursor]
+
+    page = int(request.args.get("page", 1))
+    images = get_page(50, page)
+    next_page = bool(get_page(50, page + 1))
+    next_page_num = page + 1
+    prev_page = page != 1
+    prev_page_num = page - 1
+
+    return render_template("nl/my_files.html", images=images, page=page, next_page=next_page, prev_page=prev_page,
+                           next_page_num=next_page_num, prev_page_num=prev_page_num)
+
+
+@app.route('/nl/my/config', methods=['GET'])
+def my_config-nl():
+    if session.get("logged_in", None) is None:
+        return redirect("/nl/login?next=/nl/my/config")
+    usr = _db.users.find_one({"uid": session.get("logged_in")})
+    return render_template("nl/my_config.html", **{"domains": allowed_domains, "token": usr['token']})
 
 
 @app.route('/upload', methods=['POST'])
