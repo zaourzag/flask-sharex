@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ksoft.Si :: Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <link rel="stylesheet" href="https://cdn.ksoft.si/_generic/css/milligram.css">
+    <style>
+        body {
+            background: #FFFFFF url("https://cdn.ksoft.si/images/bg/camera2.jpg") center no-repeat fixed;
+            background-size: cover;
+        }
+        .container {
+            margin: 14vh auto;
+            position: relative;
+            padding-top: 2vh;
+            padding-bottom: 1vh;
+            background-color: rgba(255,255,255,0.9);
+        }
+
+        .error {
+            color: red;
+        }
+
+        @media screen and (min-width: 620px) {
+            .container {
+                max-width: 500px;
+                width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 style="text-align: center">Login</h2>
+    {% if is_error %}
+    <blockquote style="border-left: 0.3rem solid red;"><p class="error">Wrong username or password.</p></blockquote>
+    {% endif %}
+    <form method="post">
+        <fieldset>
+            <input type="text" name="username" id="username" placeholder="Username" required>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <button type="submit" style="width: 100%">Login</button>
+        </fieldset>
+    </form>
+    <small>Don't email us about account creation. | <a href="mailto:support@ksoft.si"> support@ksoft.si</a>.</small>
+
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ksoft.si :: Foto host</title>
+    <meta name="description"
+          content="Your personal image and file host. Fast and reliable CDN powered by nginx and CloudFlare, unlimited storage and multiple custom domains with SSL security. Brought to you by the Ksoft.Si team!">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+    <link rel="stylesheet" href="https://cdn.ksoft.si/_generic/css/milligram.css">
+    <style>
+        body {
+            background: #FFFFFF url("https://cdn.ksoft.si/images/bg/camera3.jpg") center no-repeat fixed;
+            background-size: cover;
+        }
+
+        .container {
+            margin: 14vh auto;
+            position: relative;
+            padding-top: 2vh;
+            padding-bottom: 1vh;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .error {
+            color: red;
+        }
+
+        @media screen and (min-width: 620px) {
+            .container {
+                max-width: 500px;
+                width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 style="text-align: center;margin-bottom: 0"> ksoft.si - Image host</h2>
+    <p style="text-align: center">Je persoonlijke geen bullshit foto host.</p>
+    <section>
+        <a class="button" href="/nl/my" style="width: 100%">Mijn account</a>
+        <a class="button" href="/nl/my/config" style="width: 100%">geef mijn config</a>
+    </section>
+    <section style="margin-top: 3rem">
+        <h4 style="text-align: center">List van domeinen:</h4>
+        <p style="text-align: center">
+            {% for d in domains %}
+                {{ d }}<br>
+            {% endfor %}
+        </p>
+    </section>
+    <small> Don't email us about account creation.| <a href="mailto:support.ksoft.si"> </a>.
+    </small>
+    </p>
+    <small> <a href="https://i.ksoft.si/"> english?
+   </a>
+<br>
+</small>
+    </section>
+</div>
+</body>
+</html>
